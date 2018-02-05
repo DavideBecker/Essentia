@@ -1,0 +1,156 @@
+// Reusable classes and styles
+
+
+=anim
+    // transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1)
+    transition: all $animationTiming $bezier
+
+html, body
+    height: 100%
+
+body
+    overflow: hidden
+    color: $accent
+
+    .lookAtMe
+        transform: scale(1)
+        animation: attention $animationTiming $bezier running
+
+    .highlight
+        transform: scale(1)
+        animation: highlight $animationTiming * 2 $bezier running
+
+    *
+        box-sizing: border-box
+        font-family: 'Inter UI'
+
+    &.show-details
+        #details
+            transform: translateY(0%)
+
+    .instant
+        transition: none !important
+
+    &.tag-active
+        #product-grid
+            transform: scale(1)
+
+
+.surface
+    width: $width
+    height: $height
+    background-color: #FAFAFA
+
+.product-image-wrapper
+    height: $productSize - $detailsHeight - $productSpacing * 2
+    background-color: #999
+    flex: 0 0 $productSize - $productSpacing * 2
+    background: no-repeat center center / cover #EFEFEF
+    +anim
+
+.product-image
+    width: 100%
+    height: 100%
+    object-fit: contain
+
+.product-info
+    display: flex
+    height: $detailsHeight
+    line-height: $detailsHeight
+    padding: 0 12px
+    width: 100%
+    justify-content: space-between
+    background-color: #FFF
+
+    .product-name
+        white-space: nowrap
+
+    .product-price
+        white-space: nowrap
+
+.flex-wrapper
+    display: flex
+
+    &.full
+        height: 100%
+
+    &.half
+        height: 50%
+
+.no-break
+    white-space: nowrap
+
+.text
+    max-width: 500px
+    font-size: 18px
+    line-height: 24px
+
+    &.centered
+        margin: 0 auto
+        text-align: center
+
+.button
+    padding: 12px
+    border: 2px solid transparent
+    font-size: 17px
+    margin: 0 6px
+    
+    &.primary
+        background-color: $green
+        color: #FFF
+
+    &.secondary
+        border-color: $green
+        background-color: #FFF
+
+.cozy-spacing
+    margin: 24px
+
+
+@keyframes attention
+    0%
+        transform: scale(1)
+    
+    25%
+        transform: scale(1.3)
+
+    50%
+        transform: scale(1)
+
+    75%
+        transform: scale(1.3)
+
+    100%
+        transform: scale(1)
+
+hidden
+    display: none
+
+.headline
+    font-size: 24px
+    margin: 8px 0 16px
+    font-weight: 500
+
+    &.centered
+        text-align: center
+
+    &.large
+        font-size: 40px
+        margin: 16px 0 32px
+
+    &.huge
+        font-size: 56px
+        margin: 24px 0 48px
+
+@keyframes highlight
+    0%
+        background-color: inherit
+        color: inherit
+    
+    50%
+        background-color: $green
+        color: #FFF
+
+    100%
+        background-color: inherit
+        color: inherit

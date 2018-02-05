@@ -1,0 +1,210 @@
+.tag-active #shopping-list #cart:empty
+    &:before
+        animation: hoverHorizontal $animationTiming * 4 $bezier running infinite
+    
+    &:after
+        content: "Deine Einkaufsliste ist leer. \a Füge doch ein paar Artikel hinzu.\a\a Tippe als nächstes auf ein Produkt,\a das dich interessiert."
+
+.tag-active.showing-details #shopping-list #cart:empty:after
+    content: "Deine Einkaufsliste ist leer. \a Füge doch ein paar Artikel hinzu.\a\a Willst du den Artikel kaufen? \a Dann pack ihn auf deine Einkaufsliste \a Ansonsten kannst du einfach zurück gehen"
+
+body:not(.finalize-purchase) #shopping-list #cart .product.has-actions
+    margin: 24px 0
+
+    .cart-actions
+        height: 56px
+
+.cart-filled
+    #shopping-list
+        #summary
+            height: 57px
+            padding: 16px 16px
+
+        #buy-button
+            padding: 24px
+            margin: 16px
+            height: 80px
+
+#shopping-list
+    width: $shoppingList
+    height: $height
+    background-color: #FAFAFA
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+    #shopping-headline
+        width: 100%
+        background-color: $accent
+        color: #FFF
+        text-align: center
+        padding: 24px
+        font-size: 32px
+
+    #cart
+        flex: 2;
+        overflow: auto
+
+        &:empty
+            position: relative
+            overflow: hidden
+
+            &:before
+                content: ''
+                position: absolute
+                top: 0
+                left: 0
+                height: 100%
+                width: 100%
+                animation: hoverVertical $animationTiming * 4 $bezier running infinite
+                opacity: 0.5
+                transform: rotate(90deg)
+                background: no-repeat center center / 72px
+                background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIuMDY4LjAxNmwtMy43MTcgMy42OTggNS4yNjMgNS4yODZoLTEzLjYxNHY2aDEzLjYxNGwtNS4yOTUgNS4zMTcgMy43MTggMy42OTkgMTEuOTYzLTEyLjAxNnoiLz48L3N2Zz4=')
+
+            &:after
+                white-space: pre
+                content: "Deine Einkaufsliste ist leer. \a Füge doch ein paar Artikel hinzu.\a\aNimm dir einfach einen Würfel\aund lege ihn auf die freie Fläche im Boden."
+                color: #666
+                line-height: 24px
+                font-size: 20px
+                position: absolute
+                top: 0
+                left: 0
+                height: 100%
+                width: 100%
+                margin-top: 80px
+                text-align: center
+
+        .product
+            width: 100%
+            margin: 0
+            border-top: 1px solid #EEE
+            overflow: hidden
+            +anim
+
+            // Sorry :( Aber das Element wird ja eh direkt danach gelöscht :P
+            &.hide
+                height: 0 !important
+                padding: 0 !important
+                margin: 0 !important
+
+                .product-image-wrapper
+                    height: 0
+
+            .cart-meta
+                align-items: center
+                width: 100%
+                display: flex
+
+            &.invisible
+                width: 0
+
+            &:first-child
+                border-top: none
+
+            &-image-wrapper
+                height: 72px
+                flex: 0 0 72px
+                padding: 8px
+                +anim
+
+            &-name
+                flex: 2
+                font-size: 18px
+                padding-left: 16px
+                font-weight: 500
+                white-space: nowrap
+
+            &-price
+                padding-right: 16px
+                font-weight: 600
+                line-height: 24px
+                text-align: right
+                color: $green
+
+    #summary
+        display: flex
+        border-top: 1px solid #CCC
+        padding: 0
+        width: 100%
+        height: 0
+        overflow: hidden
+        +anim
+
+        .summary-amount
+            flex: 2
+            font-size: 24px
+            font-weight: 700
+
+        .summary-price
+            color: $green
+            font-weight: 700
+            font-size: 24px
+
+    #buy-button
+        background-color: $green
+        color: #FFF
+        font-size: 32px
+        text-align: center
+        padding: 0
+        margin: 0
+        height: 0
+        border-radius: 6px
+        overflow: hidden
+        +anim
+
+.cart-actions
+    display: flex
+    width: 100%
+    height: 0
+    +anim
+
+    *
+        line-height: 56px
+        color: #FFF
+        text-align: center
+
+.remove
+    background-color: #D00
+    flex: 1
+
+.change-amount
+    background-color: $accent
+    flex: 2
+
+.done
+    background-color: $green
+    flex: 1
+
+#moving-product
+    background-color: #999
+    +anim
+
+    .product-image-wrapper
+        z-index: 99999
+        position: absolute
+
+        &.moving
+            padding: 8px
+
+@keyframes hoverVertical
+    0%
+        transform: rotate(90deg)
+
+    50%
+        transform: rotate(90deg) translateX(50px)
+
+    100%
+        transform: rotate(90deg)
+    
+@keyframes hoverHorizontal
+    0%
+        transform: rotate(180deg)
+
+    50%
+        transform: rotate(180deg) translateX(50px)
+
+    100%
+        transform: rotate(180deg)
+    

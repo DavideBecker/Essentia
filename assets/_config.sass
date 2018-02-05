@@ -1,0 +1,36 @@
+// Variables, dimensions and other tweakable settings
+
+// Config
+$scale: 2
+$itemsPerRow: 4
+
+// Dimensions
+$bigImg: 256px
+$detailsHeight: 40px
+$marginBetweenProducts: 20px
+$paddingAroundProductGrid: 0px // Remaining space of product grid gets added to this too, so it's not 100% exact
+$screenWidth: 2736px
+$screenHeight: 1824px
+
+// $screenWidth: 1440px
+// $screenHeight: 900px
+
+$green: #2BA84A
+$accent: #2D3A3A
+
+// Animations
+$animationTiming: 600ms
+$bezier: cubic-bezier(0.25, 0.1, 0.25, 1)
+
+
+// Calculated values, there should be no need to change them
+$width: $screenWidth / $scale
+$height: $screenHeight / $scale
+
+$horizontalExtraWidth: $width - $height
+$shoppingList: $horizontalExtraWidth
+
+$productWrapper: $height
+$productSpacing: $marginBetweenProducts / 2
+$outerSpacing: $paddingAroundProductGrid / 2
+$productSize: $productWrapper / $itemsPerRow

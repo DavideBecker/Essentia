@@ -1,0 +1,60 @@
+// From https://codepen.io/cibgraphics/pen/PzpPVe
+
+.cls-1
+  fill: none
+  stroke: $green
+  stroke-miterlimit: 10
+  stroke-width: 5px
+
+svg 
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  margin: auto
+  width: 150px
+  height: 150px
+  display: block
+  
+  .cls-1 
+    stroke: $green
+
+.circle 
+  stroke-dasharray: 700
+  stroke-dashoffset: 700
+
+.checkmark 
+  stroke-dasharray: 150
+  stroke-dashoffset: 150
+
+.run-animation   
+  .circle 
+    animation: 1.25s circleDraw forwards
+  
+  .checkmark 
+    animation: 0.375s checkmarkDraw forwards
+    animation-delay: 0.5s
+  
+
+
+
+
+// Animation
+
+@keyframes circleDraw 
+  from 
+    stroke-dashoffset: 700
+  
+  to 
+    stroke-dashoffset: 0
+  
+
+
+@keyframes checkmarkDraw 
+  from 
+    stroke-dashoffset: 150
+  
+  to 
+    stroke-dashoffset: 0
+  

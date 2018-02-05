@@ -1,0 +1,48 @@
+// Styling of the product grid
+
+#show-products
+    display: flex
+
+#product-grid-wrapper
+    display: flex
+    width: $productWrapper
+    height: $height
+    overflow: hidden
+    position: relative
+    background-color: #FFF
+    justify-content: center
+    align-content: center
+    align-items: center
+    +anim
+
+#product-grid
+    transform: scale(0)
+    transform-origin: 100% 100%
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: center
+    align-content: center
+    padding: $outerSpacing
+    margin: -$productSpacing
+    overflow: hidden
+    +anim
+
+.product
+    width: $productSize - $productSpacing * 2
+    margin: $productSpacing / 2
+    display: flex
+    flex-wrap: wrap
+    align-content: flex-start
+    background-color: #FFF
+    +anim
+
+    .product-info
+        background-color: #EFEFEF
+        border-top: 2px solid #FFF
+
+    &-image-wrapper
+        padding: 20px
+
+    .product-actions, .product-details
+        display: none

@@ -1,0 +1,37 @@
+.finalize-purchase
+    #shopping-list
+        #cart
+            .product-image-wrapper
+                height: 36px
+                flex: 0 0 36px
+                padding: 8px
+
+        #buy-button
+            height: 0
+            padding: 0
+            margin: 0
+    
+    #purchase-summary
+        transform: translateX(0)
+
+#purchase-summary
+    position: absolute
+    top: 0
+    left: 0
+    width: $height
+    height: $height
+    background-color: #FFF
+    z-index: 999
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+    transform: translateX(-100%)
+    +anim
+
+#explain-checkout
+    width: 256px
+    height: 256px
+    // outline: 1px solid #CCC
+    margin: 40px 0
+    position: relative

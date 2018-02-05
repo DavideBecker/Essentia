@@ -1,0 +1,53 @@
+.product
+    &.floating-product
+        overflow: hidden
+        background-color: #FFF
+        position: absolute
+        margin: 0
+        padding: 0
+
+.showing-details .product.floating-product
+    padding: 120px 20px 20px 60px
+
+    .product-actions, .product-details
+        display: block
+
+    .product-details
+        margin-top: 80px
+        display: flex
+        width: 100%
+
+    .product-description
+        width: 66%
+    
+    .product-contents
+        width: 33%
+
+    .product-info
+        width: calc(100% - #{$bigImg})
+        height: auto
+        background-color: #FFF
+        color: $accent
+        flex-direction: column
+        padding-left: 24px
+
+        .product-name
+            font-size: 42px
+            padding-bottom: 24px
+            +anim
+
+        .product-price
+            color: $green
+            font-weight: 700
+            font-size: 24px
+            padding-bottom: 24px
+
+            &:before
+                content: "Preis: "
+                color: $accent
+
+    .product-image-wrapper
+        width: $bigImg
+        height: $bigImg
+        flex: 0 0 $bigImg
+        // margin: 0 24px 0 0

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./assets/vendor/jquery.min.js"></script>
+    <script src="./assets/vendor/dot.min.js"></script>
+    <script src="./assets/scripts.js"></script>
+    <link id="stylesheet" rel="stylesheet" href="./assets/styles.css?t=0">
+
+    <script id="tpl-product" type="text/template">
+        <div class="product-image-wrapper">
+            <img class="product-image" src="./assets/testImg.svg">
+        </div>
+        <div class="product-info">
+            <div class="product-name">{{=it.name}}</div>
+            <div class="product-price">{{=it.price}} &euro;</div>
+        </div>
+    </script>
+
+    <script id="tpl-product-actions" type="text/template">
+        <div class="product-actions">
+            <div class="headline no-break">Was möchtest du tun?</div>
+            <div class="action-buttons no-break">
+                <button class="go-back secondary button">Zurück zur Produktübersicht</button>
+                <button class="add-to-cart primary button">Der Einkaufsliste hinzufügen</button>
+            </div>
+        </div>
+    </script>
+
+    <script id="tpl-product-details" type="text/template">
+        <div class="product-details">
+            <div class="product-description">
+                <div class="headline">Produktbeschreibung</div>
+                <div class="text">{{=it.description}}</div>
+            </div>
+            <div class="product-contents">
+                <div class="headline">Inhalt</div>
+            </div>
+        </div>
+    </script>
+
+    <script id="tpl-cart-product" type="text/template">
+        <div class="cart-meta">
+            <div class="product-image-wrapper">
+                <img class="product-image" src="./assets/testImg.svg">
+            </div>
+            <div class="product-name">{{? it.amount > 1 }}{{=it.amount}}x{{?}} {{=it.name}}</div>
+            <div class="product-price">{{=it.price}} &euro; {{? it.amount > 1 }}x{{=it.amount}}<br>{{=it.price * it.amount}} &euro;{{?}}</div>
+        </div>
+        <div class="cart-actions">
+            <div class="remove">Entfernen</div>
+            <div class="change-amount">Anzahl ändern</div>
+            <div class="done">Okay</div>
+        </div>
+    </script>
+
+    <script id="tpl-purchase" type="text/template">
+        <div class="headline large">Einkauf überprüfen</div>
+        <div class="text centered">Bitte nimm dir die Zeit deinen Einkauf kurz zu überprüfen.</div>
+        <br>
+        <div class="text centered">Solltest du mit den Produkten zufrieden sein lege einfach deine Kundenkarte auf das Würfelfeld</div>
+        <div id="explain-checkout">
+            <svg id="checkmark-svg" class="hidden" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 193.3 193.3">
+                <circle class="cls-1 circle" cx="96.65" cy="96.65" r="94.15" />
+                <polyline class="cls-1 checkmark" points="46.9 101.4 76.9 131.4 146.4 61.9" />
+            </svg>
+        </div>
+        <div class="action-buttons">
+            <button id="cancel-purchase" class="secondary button">Ich möchte meinen Einkauf noch verändern</button>
+            <!-- <button id="finish-purchase" class="primary button">Ich möchte die ausgewählten Produkte bestellen</button> -->
+        </div>
+    </script>
+    <script id="tpl-demo-end" type="text/template">
+        <div class="text centered">
+            Vielen Dank, dass du die Essentia Demo ausprobiert hast.
+            <br>
+            <br> Deine Waren wären nun bestellt und würden dir bei dem nächsten Besuch eines Essentia Trucks frisch geliefert
+            werden.
+            <br>
+            <br> Bezahlen könntest du entweder vor Ort, oder falls du ein Zahlungsmittel bei der Anmeldung angegeben hast ist
+            es bereits im Hintergrund geschehen.
+            <br>
+            <br> Wir hoffen, dir hat unser Konzept gefallen.
+            <br><br>
+            <div class="button primary" onclick="location.reload()">Demo zurücksetzen</div>
+        </div>
+    </script>
+</head>
+
+<body class="tag-actives">
+    <div id="moving-product"></div>
+    <div id="main-wrapper" class="surface">
+        <div id="show-products">
+            <div id="product-grid-wrapper">
+                <div id="product-grid"></div>
+                <div id="details"></div>
+            </div>
+            <div id="shopping-list">
+                <div id="shopping-headline">Deine Einkaufsliste</div>
+                <div id="cart"></div>
+                <div id="summary">
+                    <div class="summary-amount">Gesamt</div>
+                    <div id="price-wrapper" class="summary-price">
+                        <span id="total">0.00</span> &euro;</div>
+                </div>
+                <div id="buy-button">Jetzt Bestellen</div>
+            </div>
+        </div>
+    </div>
+    <div id="home-screen">
+        <div class="next-truck">
+            <div class="headline huge centered">Nächster Essentia Besuch</div>
+            <div class="truck-time">
+                <div id="truck-time-number">3</div>
+                <div id="truck-time-unit">Tage</div>
+            </div>
+            <div class="truck-location">Martkplatz, Neutsch</div>
+            <div class="truck-date">Montag, 13. August 2017 von 13:00 bis 14:00</div>
+        </div>
+        <div class="order-table">
+        </div>
+    </div>
+    <div id="purchase-summary"></div>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+#home-screen
+    width: $height
+    height: $height
+    position: absolute
+    top: 0
+    left: 0
+    background-color: #FFF
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    transform: translateY(0)
+    +anim
+
+.tag-active #home-screen
+    transform: translateY(-100%)
+
+.truck-time
+    text-align: center
+    margin-bottom: 24px
+
+#truck-time-number
+    font-size: 120px
+    font-weight: 500
+    color: $green
+    display: inline-block
+    line-height: 80px
+    border-radius: 2em
+
+#truck-time-unit
+    display: inline-block
+    font-weight: 500
+    font-size: 48px
+    color: #888
+    position: relative
+    bottom: 8px
+
+.truck-location
+    font-size: 32px
+    text-align: center
+    margin-bottom: 32px
+
+.truck-date
+    color: #999
+    text-align: center
+    font-size: 24px
