@@ -57,6 +57,18 @@ if(port) {
 io.on('connection', (socket) => {
     console.log('user connected')
     // add handlers for socket events
+
+    socket.on('tagAppeared', function() {
+        io.emit('tagAppeared', 1)
+    })
+
+    socket.on('tagDisappeared', function() {
+        io.emit('tagDisappeared', 1)
+    })
+
+    socket.on('finishing', function() {
+        io.emit('finishing', 1)
+    })
 });
 
 fs.watch('./assets/styles.css', function(event, file) {

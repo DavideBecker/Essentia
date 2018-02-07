@@ -1,0 +1,16 @@
+.identity
+    background: center center no-repeat / cover
+    mix-blend-mode: multiply
+    width: 100%
+    height: 100%
+
+    &-
+
+        &1
+            .product-image
+                filter: sepia() saturate(10000%) hue-rotate(100deg)
+
+        @for $i from 0 to 36
+            &#{$i}
+                .product-image
+                        filter: sepia() saturate(1000%) hue-rotate(#{$i * 10}deg)

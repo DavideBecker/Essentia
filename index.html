@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Essentia</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./assets/vendor/jquery.min.js"></script>
     <script src="./assets/vendor/dot.min.js"></script>
@@ -14,10 +14,12 @@
 
     <script id="tpl-product" type="text/template">
         <div class="product-image-wrapper">
-            <img class="product-image" src="./assets/testImg.svg">
+            <div class="identity identity-{{=it.identity}}">
+                <img class="product-image" src="./assets/products/{{=it.icon}}.svg">
+            </div>
         </div>
         <div class="product-info">
-            <div class="product-name">{{=it.name}}</div>
+            <div class="product-name">{{=it.name.product}} <span class="brand">von {{=it.name.brand}}</span></div>
             <div class="product-price">{{=it.price}} &euro;</div>
         </div>
     </script>
@@ -40,6 +42,30 @@
             </div>
             <div class="product-contents">
                 <div class="headline">Inhalt</div>
+                <div class="flex-row">
+                    <div class="flex-col">Brennwert</div>
+                    <div class="flex-col">{{=it.inhalt.brenn}} kcal</div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col">Eiweiß</div>
+                    <div class="flex-col">{{=it.inhalt.ei}} g</div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col">Kohlenhydrate</div>
+                    <div class="flex-col">{{=it.inhalt.kohle}} g</div>
+                </div>
+                <div class="flex-row indent">
+                    <div class="flex-col">Davon Zucker</div>
+                    <div class="flex-col">{{=it.inhalt.zucker}} g</div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col">Fett</div>
+                    <div class="flex-col">{{=it.inhalt.fett}} g</div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col">Salz</div>
+                    <div class="flex-col">{{=it.inhalt.salz}} g</div>
+                </div>
             </div>
         </div>
     </script>
@@ -47,10 +73,13 @@
     <script id="tpl-cart-product" type="text/template">
         <div class="cart-meta">
             <div class="product-image-wrapper">
-                <img class="product-image" src="./assets/testImg.svg">
+                <div class="identity identity-{{=it.identity}}">
+                    <img class="product-image" src="./assets/products/{{=it.icon}}.svg">
+                </div>
+                <!-- <div class="product-image" src="./assets/products/{{=it.icon}}.svg"></div> -->
             </div>
             <div class="product-name">{{? it.amount > 1 }}{{=it.amount}}x{{?}} {{=it.name}}</div>
-            <div class="product-price">{{=it.price}} &euro; {{? it.amount > 1 }}x{{=it.amount}}<br>{{=it.price * it.amount}} &euro;{{?}}</div>
+            <div class="product-price">{{=it.price }} &euro;/* {{? it.amount > 1 }}x{{=it.amount}}<br>{{=it.price * it.amount}} &euro;{{?}}*/</div>
         </div>
         <div class="cart-actions">
             <div class="remove">Entfernen</div>
@@ -76,6 +105,7 @@
             <!-- <button id="finish-purchase" class="primary button">Ich möchte die ausgewählten Produkte bestellen</button> -->
         </div>
     </script>
+
     <script id="tpl-demo-end" type="text/template">
         <div class="text centered">
             Vielen Dank, dass du die Essentia Demo ausprobiert hast.
@@ -91,42 +121,57 @@
             <div class="button primary" onclick="location.reload()">Demo zurücksetzen</div>
         </div>
     </script>
+
+    <script id="tpl-popup-amount" type="text/template">
+        <div class="product-name">{{=it.name}}</div>
+        <div class="amount-grid">
+            <div class="minus">Weniger</div>
+            <div class="amount">{{=it.amount}}</div>
+            <div class="plus">Mehr</div>
+        </div>
+        <div class="amount-done">Fertig</div>
+    </script>
 </head>
 
 <body class="tag-actives">
-    <div id="moving-product"></div>
-    <div id="main-wrapper" class="surface">
-        <div id="show-products">
-            <div id="product-grid-wrapper">
-                <div id="product-grid"></div>
-                <div id="details"></div>
-            </div>
-            <div id="shopping-list">
-                <div id="shopping-headline">Deine Einkaufsliste</div>
-                <div id="cart"></div>
-                <div id="summary">
-                    <div class="summary-amount">Gesamt</div>
-                    <div id="price-wrapper" class="summary-price">
-                        <span id="total">0.00</span> &euro;</div>
+        <div id="moving-product"></div>
+    <div id="all-wrapper">
+        <div id="main-wrapper" class="surface">
+            <div id="show-products">
+                <div id="product-grid-wrapper">
+                    <div id="product-grid"></div>
+                    <div id="details"></div>
                 </div>
-                <div id="buy-button">Jetzt Bestellen</div>
+                <div id="shopping-list">
+                    <div id="shopping-headline">Deine Einkaufsliste</div>
+                    <div id="cart"></div>
+                    <div id="summary">
+                        <div class="summary-amount">Gesamt</div>
+                        <div id="price-wrapper" class="summary-price">
+                            <span id="total">0.00</span> &euro;</div>
+                    </div>
+                    <div id="buy-button">Jetzt Bestellen</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="home-screen">
-        <div class="next-truck">
-            <div class="headline huge centered">Nächster Essentia Besuch</div>
-            <div class="truck-time">
-                <div id="truck-time-number">3</div>
-                <div id="truck-time-unit">Tage</div>
+        <div id="home-screen">
+            <div class="next-truck">
+                <div class="headline huge centered">Nächster Essentia Besuch</div>
+                <div class="truck-time">
+                    <div id="truck-time-number">Heute</div>
+                    <div id="truck-time-unit"></div>
+                </div>
+                <div class="truck-location">Martkplatz, Neutsch</div>
+                <div class="truck-date">Montag, 13. August 2017 von 13:00 bis 14:00</div>
             </div>
-            <div class="truck-location">Martkplatz, Neutsch</div>
-            <div class="truck-date">Montag, 13. August 2017 von 13:00 bis 14:00</div>
+            <div class="order-table">
+            </div>
         </div>
-        <div class="order-table">
-        </div>
+        <div id="purchase-summary"></div>
     </div>
-    <div id="purchase-summary"></div>
+    <div id="popup-wrapper">
+        <div id="popup"></div>
+    </div>
 </body>
 
 </html>

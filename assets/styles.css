@@ -165,6 +165,11 @@ body.tag-active #product-grid {
   object-fit: contain;
 }
 
+.showing-details #details .product-info .product-name .brand {
+  display: inline;
+  font-size: 16px;
+}
+
 .product-info {
   display: flex;
   height: 40px;
@@ -177,6 +182,12 @@ body.tag-active #product-grid {
 
 .product-info .product-name {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-info .product-name .brand {
+  display: none;
 }
 
 .product-info .product-price {
@@ -229,6 +240,20 @@ body.tag-active #product-grid {
 
 .cozy-spacing {
   margin: 24px;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.flex-row.indent {
+  padding-left: 32px;
+}
+
+.flex-row:nth-child(odd) {
+  background-color: #FAFAFA;
 }
 
 @keyframes attention {
@@ -394,6 +419,244 @@ hidden {
 
 .product .product-actions, .product .product-details {
   display: none;
+}
+
+.popup-visible #popup-wrapper {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: translateY(0);
+}
+
+.popup-visible #popup-wrapper #popup {
+  transform: scale(1);
+}
+
+.popup-visible #all-wrapper {
+  filter: blur(4px);
+}
+
+#popup-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  transform: translateY(-100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 600ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-property: background-color;
+}
+
+#popup-wrapper #popup {
+  max-width: 400px;
+  width: 100%;
+  transform: scale(0);
+  transition: all 600ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+#popup-wrapper #popup * {
+  text-align: center;
+  font-size: 24px;
+}
+
+#popup-wrapper #popup .product-name {
+  padding: 16px;
+  font-weight: 600;
+  padding: 24px;
+  margin-bottom: 16px;
+  background-color: #FFF;
+}
+
+#popup-wrapper #popup .amount-grid {
+  display: flex;
+  outline: 1px solid #FFF;
+}
+
+#popup-wrapper #popup .amount-grid .minus {
+  padding: 24px;
+  flex: 2;
+  background-color: #2D3A3A;
+  color: #FFF;
+  cursor: pointer;
+}
+
+#popup-wrapper #popup .amount-grid .amount {
+  padding: 24px;
+  flex: 1;
+  background-color: #FFF;
+}
+
+#popup-wrapper #popup .amount-grid .plus {
+  padding: 24px;
+  flex: 2;
+  background-color: #2D3A3A;
+  color: #FFF;
+  cursor: pointer;
+}
+
+#popup-wrapper #popup .amount-done {
+  padding: 16px;
+  background-color: #2BA84A;
+  color: #FFF;
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.identity {
+  background: center center no-repeat / cover;
+  mix-blend-mode: multiply;
+  width: 100%;
+  height: 100%;
+}
+
+.identity-1 .product-image {
+  filter: sepia() saturate(10000%) hue-rotate(100deg);
+}
+
+.identity-0 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(0deg);
+}
+
+.identity-1 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(10deg);
+}
+
+.identity-2 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(20deg);
+}
+
+.identity-3 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(30deg);
+}
+
+.identity-4 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(40deg);
+}
+
+.identity-5 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(50deg);
+}
+
+.identity-6 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(60deg);
+}
+
+.identity-7 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(70deg);
+}
+
+.identity-8 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(80deg);
+}
+
+.identity-9 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(90deg);
+}
+
+.identity-10 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(100deg);
+}
+
+.identity-11 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(110deg);
+}
+
+.identity-12 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(120deg);
+}
+
+.identity-13 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(130deg);
+}
+
+.identity-14 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(140deg);
+}
+
+.identity-15 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(150deg);
+}
+
+.identity-16 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(160deg);
+}
+
+.identity-17 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(170deg);
+}
+
+.identity-18 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(180deg);
+}
+
+.identity-19 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(190deg);
+}
+
+.identity-20 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(200deg);
+}
+
+.identity-21 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(210deg);
+}
+
+.identity-22 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(220deg);
+}
+
+.identity-23 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(230deg);
+}
+
+.identity-24 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(240deg);
+}
+
+.identity-25 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(250deg);
+}
+
+.identity-26 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(260deg);
+}
+
+.identity-27 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(270deg);
+}
+
+.identity-28 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(280deg);
+}
+
+.identity-29 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(290deg);
+}
+
+.identity-30 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(300deg);
+}
+
+.identity-31 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(310deg);
+}
+
+.identity-32 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(320deg);
+}
+
+.identity-33 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(330deg);
+}
+
+.identity-34 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(340deg);
+}
+
+.identity-35 .product-image {
+  filter: sepia() saturate(1000%) hue-rotate(350deg);
 }
 
 .product.floating-product {
@@ -599,6 +862,7 @@ body:not(.finalize-purchase) #shopping-list #cart .product.has-actions .cart-act
   font-weight: 600;
   line-height: 24px;
   text-align: right;
+  white-space: nowrap;
   color: #2BA84A;
 }
 

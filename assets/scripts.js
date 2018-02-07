@@ -3,6 +3,67 @@ var cartItems = {}
 var products = {}
 var totalPrice = 0
 var checkoutReady = false
+
+var brands = ["Alpro", "Coca-Cola", "Ferrero", "Nestle", "Veggy Life", "Rewe Beste Wahl", "Ja!", "Kölln", "Barilla", "Schwälbchen", "Naturalis", "Maggi", "Clever", "Landliebe", "Almased", "Homann Feinkost", "Tchibo", "Sanella", "Öttinger"]
+var catchphrase = ["gastronomischer Orgasmus", "Traum", "verführerisches Geschmackserlebnis", "Muntermacher ohne Gleichen.", "Genuss zum Verlieben", "guter Weg den Tag zu beenden.", "der richtig Weg zum Traumkörper"]
+var sentences = [
+    "Kein anderes Produkt schafft es so sehr die Massen zu begeistern. ",
+    "Vom Institut für richtig nice Ernährung empfohlen. ",
+    "Mit dem einzigarten Geschmack. ",
+    "Der Verkaufschlager aus Italien hat nun auch Deutsche Regale erreicht. ",
+    "Nur bei Essentia in der Premium-Aluminiumbox erhältlich. ",
+    "Von Doktoren empfohlen: Nur zwei Portionen täglich und die Lebenserwartung steigt um durchschnittlich 18 Sekunden. ",
+    "Kalorienarm und ohne natürliches Zucker. Von Natur aus frei von gesättigten Fettsäuren. ",
+    "Trägt mit seinem extem hohen Proteingehalt zu einem unnatürlich hohen Muskelzuwachs bei. ",
+    "Kann bei zu geringem Verzehr abführend wirken. "
+]
+var productCategories = [
+    {
+        name: "Box",
+        icons: [1, 2, 3, 4],
+        products: ["Kaffee", "Tee", "Spaghetti", "Tortellini", "Müsli"]
+    },
+    {
+        name: "Konserven",
+        icons: [5, 6],
+        products: ["Mais", "Oliven", "Eingelegte Paprika", "Erbsen", "Bohnen"]
+    },
+    {
+        name: "Marmeladenglas",
+        icons: [7],
+        products: ["Erdbeermarmelade", "Leberwurst", "Erdnussbutter", "Quark", "Butter"]
+    },
+    {
+        name: "Krug",
+        icons: [8],
+        products: ["Waschmittel", "Spüli"]
+    },
+    {
+        name: "Schoki",
+        icons: [9],
+        products: ["Müsli-Riegel", "Schokolade", "Kaugummi"]
+    },
+    {
+        name: "TetraPak",
+        icons: [10, 11],
+        products: ["Gemüsesaft", "Milch", "Orangensaft", "Tomatensaft", "Soja-Milch"]
+    },
+    // {
+    //     name: "???",
+    //     icons: [12],
+    //     products: ["", ""]
+    // },
+    {
+        name: "Trinken",
+        icons: [13],
+        products: ["Wasser", "Eistee", "Bier", "Cola", "Fanta", "Energy Drink"]
+    },
+    {
+        name: "Einmachglas?",
+        icons: [14],
+        products: ["Gewürzgurken", "Kapern", "Würstchen", "Fertigsauce"]
+    }
+]
 $(function () {
     socket = io();
 
@@ -27,6 +88,7 @@ $(function () {
         totalPrice: getElem('total'),
         buy: getElem('buy-button'),
         summary: getElem('purchase-summary'),
+        popup: getElem('popup'),
 
         tpl: {
             product: tpl('tpl-product'),
@@ -35,6 +97,7 @@ $(function () {
             cart: tpl('tpl-cart-product'),
             finalize: tpl('tpl-purchase'),
             demo: tpl('tpl-demo-end'),
+            change: tpl('tpl-popup-amount'),
         },
 
         products: document.getElementsByClassName('product')
@@ -44,22 +107,47 @@ $(function () {
         console.log('appear', tagID);
         tag = tagID;
 
-        if (tagID == '47BF162D55680') {
-            document.body.classList.add('tag-active')
-            document.body.classList.add('tag-a');
-        }
+        // if (tagID == '47BF162D55680') {
+        document.body.classList.add('tag-active')
+        document.body.classList.add('tag-a');
+        // }
+
+        getNewProducts();
 
         // if (tagID == '83A65F0') {
         // }
-        
-        if(checkoutReady && tagID == '83A65F0') {
+
+        if (checkoutReady && tagID == '83A65F0') {
             document.body.classList.add('tag-b');
             var checkmark = getElem('checkmark-svg')
             checkmark.setAttribute('class', 'run-animation')
-            window.setTimeout(function() {
+            window.setTimeout(function () {
                 e.summary.innerHTML = e.tpl.demo({})
             }, 1500)
         }
+    })
+
+    document.addEventListener('keydown', function (event) {
+        console.log(event)
+        if (event.code == 'KeyR' || event.code == 'KeyC') {
+            getNewProducts()
+        }
+        if (event.code == 'KeyT' || event.code == 'KeyC') {
+            e.body.classList.toggle('tag-active')
+        }
+
+        if (event.code == 'Digit1') {
+            socket.emit('tagAppeared')
+        }
+
+        if (event.code == 'Digit2') {
+            socket.emit('tagDisappeared')
+        }
+
+        if (event.code == 'Digit3') {
+            socket.emit('finishing')
+        }
+        
     })
 
     socket.on('tagDisappeared', function (tagID) {
@@ -69,6 +157,15 @@ $(function () {
         e.details.innerHTML = ''
     })
 
+    socket.on('finishing', function() {
+        document.body.classList.add('tag-b');
+        var checkmark = getElem('checkmark-svg')
+        checkmark.setAttribute('class', 'run-animation')
+        window.setTimeout(function () {
+            e.summary.innerHTML = e.tpl.demo({})
+        }, 1500)
+    })
+
     socket.on('refresh', function (file) {
         if (file == 'styles.css') {
             e.css.href = e.css.href.replace(/\?t=.*$/, '?t=' + new Date().getMilliseconds())
@@ -76,6 +173,74 @@ $(function () {
             location.reload()
         }
     })
+
+    function randomNumber(min, max) {
+        return Math.floor(Math.random() * max) + min
+    }
+
+    function randomElement(arr){
+        var r = Math.floor(Math.random() * arr.length)
+        return arr[Math.floor(Math.random() * arr.length)]
+    }
+
+    function generateProductName(category) {
+        var products = productCategories[category ? category - 1 : randomNumber(0, productCategories.length)].products
+
+        var r = {
+            product: randomElement(products),
+            brand: randomElement(brands)
+        }
+
+        console.log(1, r)
+
+        return r
+    }
+
+    function generateDescription(brand, productName){
+        // Produkt - von - Hersteller - ist ein - Beschreibung
+        return productName + " von " + brand + " ist ein " + randomElement(catchphrase) + "."
+    }
+
+    function generateMarketing(count){
+        var desc = ""
+        for(var i = 0; i < count; i++){
+            desc += randomElement(sentences)
+        }
+        return desc
+    }
+
+    function getNewProducts() {
+        e.grid.innerHTML = ''
+        products = []
+        for (var i = 0; i <= 15; i++) {
+            var node = document.createElement('div')
+            node.classList.add('product')
+            var cat = randomNumber(1, productCategories.length)
+            var own = products[i] = {
+                id: i,
+                elem: node,
+                category: productCategories[cat - 1],
+                identity: randomNumber(1, 36),
+                price: Math.floor(Math.random() * 500),
+                icon: icon,
+                name: generateProductName(cat),
+            }
+            var icon = own.category.icons[randomNumber(0, own.category.icons.length)]
+            own.description = generateDescription(own.name.brand, own.name.product) + ' ' + generateMarketing(randomNumber(2, 6))
+            own.icon = icon
+            node.dataset.productId = i
+            node.innerHTML = e.tpl.product({
+                // price: formatPrice(metadata.price * cartProd.amount),
+                price: formatPrice(own.price),
+                category: own.category,
+                icon: icon,
+                identity: own.identity,
+                name: own.name
+            })
+            node.dataset.icon = icon
+            e.grid.appendChild(node)
+        }
+    }
 
     function getAbsolutePosition(elem) {
         return elem.getBoundingClientRect();
@@ -186,8 +351,17 @@ $(function () {
         copy.children[1].innerHTML += e.tpl.actions({
 
         })
+        var coal = randomNumber(0, 1000) / 10
         copy.innerHTML += e.tpl.details({
-            description: metadata.description
+            description: metadata.description,
+            inhalt: {
+                "brenn": randomNumber(0, 10000) / 10,
+                "ei": randomNumber(0, 250) / 10,
+                "kohle": coal,
+                "zucker": Math.floor(coal - randomNumber(0, coal * 10) / 10),
+                "fett": randomNumber(0, 500) / 10,
+                "salz": randomNumber(0, 40) / 10
+            }
         })
         setPosition(copy, pos)
         triggerReflow(copy)
@@ -243,11 +417,24 @@ $(function () {
 
         prod.dataset.productId = metadata.id
 
+        console.log(metadata)
+
         prod.innerHTML = e.tpl.cart({
-            name: metadata.name,
+            name: metadata.name.product,
             price: formatPrice(metadata.price * cartProd.amount),
+            icon: metadata.icon,
+            identity: metadata.identity,
             amount: cartProd.amount
         })
+
+        // node.innerHTML = e.tpl.product({
+        //     // price: formatPrice(metadata.price * cartProd.amount),
+        //     price: formatPrice(own.price),
+        //     category: own.category,
+        //     icon: icon,
+        //     identity: own.identity,
+        //     name: own.name
+        // })
 
         // e.cart.scrollTop = e.cart.scrollHeight
         prod.scrollIntoView()
@@ -274,8 +461,52 @@ $(function () {
         that.classList.toggle('has-actions')
     })
 
+    
     $(document).on('click', '#cart .cart-actions .done', function () {
         this.parentNode.parentNode.classList.remove('has-actions')
+    })
+
+    var amountProduct
+    
+    $(document).on('click', '#cart .cart-actions .change-amount', function () {
+        var product = this.parentNode.parentNode
+        var metadata = getMetadataForProduct(product)
+
+        amountProduct = metadata
+
+        console.log(amountProduct)
+
+        e.popup.innerHTML = e.tpl.change({
+            name: metadata.name.product,
+            amount: cartItems[metadata.id].amount
+        })
+        e.body.classList.add('popup-visible')
+    })
+
+    $(document).on('click', '.plus', function () {
+        var i = cartItems[amountProduct.id].amount += 1
+        this.parentNode.children[1].innerHTML = i
+        // e.body.classList.remove('popup-visible')
+    })
+
+    $(document).on('click', '.minus', function () {
+        if(cartItems[amountProduct.id].amount > 1) {
+            var i = cartItems[amountProduct.id].amount -= 1
+            this.parentNode.children[1].innerHTML = i
+        }
+        // e.body.classList.remove('popup-visible')
+    })
+
+    $(document).on('click', '.amount-done', function () {
+        e.body.classList.remove('popup-visible')
+        var cart = cartItems[amountProduct.id]
+        cart.elem.innerHTML = e.tpl.cart({
+            name: amountProduct.name.product,
+            price: formatPrice(amountProduct.price * cart.amount),
+            icon: amountProduct.icon,
+            identity: amountProduct.identity,
+            amount: cart.amount
+        })
     })
 
     $(document).on('click', '#cart .cart-actions .remove', function () {
@@ -287,10 +518,10 @@ $(function () {
         triggerReflow(ref)
         ref.classList.add('hide')
         delete cartItems[metadata.id]
-        if(!Object.keys(cartItems).length) {
+        if (!Object.keys(cartItems).length) {
             e.body.classList.remove('cart-filled')
         }
-        window.setTimeout(function() {
+        window.setTimeout(function () {
             ref.remove()
         }, 600)
     })
@@ -307,21 +538,4 @@ $(function () {
         checkoutReady = false
     })
 
-    for (var i = 0; i <= 15; i++) {
-        var node = document.createElement('div')
-        node.classList.add('product')
-        var own = products[i] = {
-            id: i,
-            elem: node,
-            price: Math.floor(Math.random() * 2000),
-            name: 'Lorem Ipsum',
-            description: 'Eine kurze Beschreibung. Et consequatur voluptas delectus perspiciatis saepe. Beatae placeat iure veniam consequatur reprehenderit. Eveniet repellat ducimus nam aut veniam a.'
-        }
-        node.dataset.productId = i
-        node.innerHTML = e.tpl.product({
-            price: formatPrice(own.price),
-            name: own.name
-        })
-        e.grid.appendChild(node)
-    }
 })
